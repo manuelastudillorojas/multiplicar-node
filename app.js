@@ -1,23 +1,22 @@
-const { command } = require('yargs');
-const argv = require('yargs')
-    .command('listar', 'Imprimi en consola la tabla de multiplicar', {
-        base: {
-            demand: true,
-            alias: 'b'
-        },
-        limite: {
-            alias: 'l',
-            default: 10
-        }
-    })
-    .help()
-    .argv;
-const { crearArchivo } = require('./multiplicar/multiplicar');
+const argv = require('./config/yargs')
+const { crearArchivo, listarTabla } = require('./multiplicar/multiplicar');
 //let base = '12';
 
-let argv2 = process.argv;
+let comando = argv._[0];
 
-console.log('Limite', argv.limite);
+switch (comando) {
+    case 'listar':
+        listarTabla(argv.base, argv.limite)
+        break;
+    case 'crear':
+        crearArchivo(argv.base, argv.limite)
+            .then(archivo => console.log(`Archivo creado: ${ archivo}`))
+            .catch(error => (console.log(error)));
+        break;
+    default:
+        console.log('No Existe');
+}
+
 
 //let parametro = argv[2];
 //let base = parametro.split('=')[1]
